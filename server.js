@@ -7,14 +7,14 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'lojaRoupa'
+    database: 'lojaroupa'
 });
 
 connection.connect();
 
 app.get('/api/json', (req, res) => {
 
-    const sql = "SELECT * FROM visualizarvendas";
+    const sql = "SELECT * FROM relatoriovendas";
 
     connection.query(sql, (error, results, fields) => {
         if (error) {
@@ -25,9 +25,9 @@ app.get('/api/json', (req, res) => {
     });
 });
 
-// http://localhost:3000/api/json → endpoint
+// http://localhost:2000/api/json → endpoint
 
-const port = 3000;
+const port = 2000;
 app.listen(port, () => {
     console.log(`Servidor está rodando em http://localhost:${port}`);
 });

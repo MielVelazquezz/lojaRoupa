@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 06/03/2024 às 13:47
+-- Tempo de geração: 06/03/2024 às 14:30
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -52,7 +52,7 @@ INSERT INTO `clientes` (`cliente_id`, `cliente_nome`, `cliente_idade`, `cliente_
 --
 
 CREATE TABLE `marcas` (
-  `marcas_id` int(11) NOT NULL,
+  `marca_id` int(11) NOT NULL,
   `marca_nome` varchar(80) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -60,7 +60,7 @@ CREATE TABLE `marcas` (
 -- Despejando dados para a tabela `marcas`
 --
 
-INSERT INTO `marcas` (`marcas_id`, `marca_nome`) VALUES
+INSERT INTO `marcas` (`marca_id`, `marca_nome`) VALUES
 (1, 'Nike'),
 (2, 'Adidas'),
 (3, 'Puma'),
@@ -79,14 +79,14 @@ CREATE TABLE `produtos` (
   `tipo_produto` enum('camisa','vestido','calça','short') DEFAULT NULL,
   `cor_produto` varchar(50) DEFAULT NULL,
   `valor_produto` int(11) DEFAULT NULL,
-  `marcas_id` int(11) DEFAULT NULL
+  `marca_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `produtos`
 --
 
-INSERT INTO `produtos` (`produto_id`, `tipo_produto`, `cor_produto`, `valor_produto`, `marcas_id`) VALUES
+INSERT INTO `produtos` (`produto_id`, `tipo_produto`, `cor_produto`, `valor_produto`, `marca_id`) VALUES
 (1, 'camisa', 'Preta  e Branca', 250, 2),
 (2, 'vestido', 'Verde', 500, 5),
 (3, 'calça', 'Jeans', 150, 4),
@@ -125,33 +125,11 @@ INSERT INTO `vendas` (`venda_id`, `cliente_id`, `produto_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura stand-in para view `visualizarvendas`
--- (Veja abaixo para a visão atual)
---
-CREATE TABLE `visualizarvendas` (
-`cliente` varchar(50)
-,`tipoProduto` enum('camisa','vestido','calça','short')
-,`marca` varchar(80)
-,`valor_produto` int(11)
-);
-
--- --------------------------------------------------------
-
---
 -- Estrutura para view `quantidadevendas`
 --
 DROP TABLE IF EXISTS `quantidadevendas`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `quantidadevendas`  AS SELECT count(0) AS `COUNT(*)` FROM `vendas` ;
-
--- --------------------------------------------------------
-
---
--- Estrutura para view `visualizarvendas`
---
-DROP TABLE IF EXISTS `visualizarvendas`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `visualizarvendas`  AS SELECT `clientes`.`cliente_nome` AS `cliente`, `produtos`.`tipo_produto` AS `tipoProduto`, `marcas`.`marca_nome` AS `marca`, `produtos`.`valor_produto` AS `valor_produto` FROM (((`vendas` join `clientes` on(`vendas`.`cliente_id` = `clientes`.`cliente_id`)) join `produtos` on(`vendas`.`produto_id` = `produtos`.`produto_id`)) join `marcas` on(`produtos`.`marcas_id` = `marcas`.`marcas_id`)) ;
 
 --
 -- Índices para tabelas despejadas
@@ -167,14 +145,14 @@ ALTER TABLE `clientes`
 -- Índices de tabela `marcas`
 --
 ALTER TABLE `marcas`
-  ADD PRIMARY KEY (`marcas_id`);
+  ADD PRIMARY KEY (`marca_id`);
 
 --
 -- Índices de tabela `produtos`
 --
 ALTER TABLE `produtos`
   ADD PRIMARY KEY (`produto_id`),
-  ADD KEY `marcas_id` (`marcas_id`);
+  ADD KEY `marcas_id` (`marca_id`);
 
 --
 -- Índices de tabela `vendas`
@@ -192,7 +170,7 @@ ALTER TABLE `vendas`
 -- Restrições para tabelas `produtos`
 --
 ALTER TABLE `produtos`
-  ADD CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`marcas_id`) REFERENCES `marcas` (`marcas_id`);
+  ADD CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`marca_id`) REFERENCES `marcas` (`marca_id`);
 
 --
 -- Restrições para tabelas `vendas`
